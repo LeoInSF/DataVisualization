@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+h2 {
+    font-size: 25px;
+    color: blue;
+
+}
+
+p {
+    font-size:15px;
+    color: orange;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+
+</style>
+<body>
+    
+<h2>Graph Three: Line Graph:</h2>
+<p> This line graph is using medianIncome as x asix and medianHouseValue as y asix.</p>
+<script src="http://d3js.org/d3.v3.js"></script>
+<script>
+
+var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+//var parseDate = d3.time.format("%d-%b-%y").parse;
+
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .x(function(d) { return x(d.medianIncome); })
+    .y(function(d) { return y(d.medianHouseValue); });
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.json("convertcsv.json", function(error, data) {
+    var dataset = data.samples.slice(0, 20);
+    
+    dataset.forEach(function(d) {
+        d.medianIncome = +d.medianIncome;
+        d.medianHouseValue = +d.medianHouseValue;
+  });
+
+  x.domain(d3.extent(dataset, function(d) { return d.medianIncome; }));
+  y.domain(d3.extent(dataset, function(d) { return d.medianHouseValue; }));
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Price ($)");
+
+  svg.append("path")
+      .datum(dataset)
+      .attr("class", "line")
+      .attr("d", line);
+});
+</script>
+<p> <b>Conclusion:</b> Rich people live in the palace!</p>
