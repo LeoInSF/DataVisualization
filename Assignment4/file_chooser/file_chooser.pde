@@ -128,9 +128,9 @@ void draw(){
 
 public void drawAxes(String visName){
   
-  stroke(#888888);
+  stroke(#909091);
   strokeWeight(1);
-  fill(#888888);
+  fill(#909091);
   
   int x1 = Padding;
   int x2 = width - Padding;
@@ -310,9 +310,9 @@ public void scatterPlotMatrix(){
   int gapLine = 5;
   int num = attrs.length;
   
-  stroke(#888888);
+  stroke(#909091);
   strokeWeight(1);
-  fill(#888888);
+  fill(#909091);
   
   int x1 = Padding;
   int x2 = width - Padding + 50;
